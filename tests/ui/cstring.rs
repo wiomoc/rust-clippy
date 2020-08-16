@@ -17,8 +17,13 @@ mod issue4375 {
         fn foo(data: *const c_char);
     }
 
-    pub fn bar(v: &[u8]) {
+    pub fn bar_ok(v: &[u8]) {
         let cstr = CString::new(v);
         unsafe { foo(cstr.unwrap().as_ptr()) }
+    }
+
+    pub fn bar_bad(v: &[u8]) {
+        let c_str = CString::new(v).unwrap().as_ptr();
+        unsafe { foo(c_str) }
     }
 }

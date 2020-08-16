@@ -30,17 +30,17 @@ LL |     CString::new("foo").expect("dummy").as_ptr();
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: you are getting the inner pointer of a temporary `CString`
-  --> $DIR/cstring.rs:22:22
+  --> $DIR/cstring.rs:26:21
    |
-LL |         unsafe { foo(cstr.unwrap().as_ptr()) }
-   |                      ^^^^^^^^^^^^^^^^^^^^^^
+LL |         let c_str = CString::new(v).unwrap().as_ptr();
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    |
    = note: that pointer will be invalid outside this expression
 help: assign the `CString` to a variable to extend its lifetime
-  --> $DIR/cstring.rs:22:22
+  --> $DIR/cstring.rs:26:21
    |
-LL |         unsafe { foo(cstr.unwrap().as_ptr()) }
-   |                      ^^^^^^^^^^^^^
+LL |         let c_str = CString::new(v).unwrap().as_ptr();
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: aborting due to 3 previous errors
 

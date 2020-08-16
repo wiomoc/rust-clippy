@@ -2165,6 +2165,13 @@ fn lint_cstring_as_ptr(cx: &LateContext<'_>, expr: &hir::Expr<'_>, source: &hir:
         if cx.tcx.is_diagnostic_item(sym!(result_type), def.did);
         if match_type(cx, substs.type_at(0), &paths::CSTRING);
         then {
+            // Ignore, if ptr is used in a call in the same expression #5838
+            if let Some((_, hir::Node::Expr(parent_expr))) = cx.tcx.hir().parent_iter(expr.hir_id).next() {
+                if let hir::ExprKind::Call(_, _) = parent_expr.kind {
+                    return;
+                }
+            }
+
             span_lint_and_then(
                 cx,
                 TEMPORARY_CSTRING_AS_PTR,
